@@ -3,12 +3,13 @@ import config from './config.js'
 import categorias from './modulos/categorias/ruta.js'
 import productos from './modulos/productos/ruta.js'
 import pool from './config.js'
-const cors =  require ("cors")
+import cors from "cors";
+
 const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: "http://127.0.0.1:4200"
+    origin: "http://localhost:4200"
 }))
 
 //configuracion

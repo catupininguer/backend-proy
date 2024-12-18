@@ -16,11 +16,23 @@ router.get('/',async (req,res) =>{
 
 })
 
+router.get('/:id', async(req, res)=>{
+    const {id} = req.params
+    try {
+        const [result] = await pool.query(`select * from productos where id=${id}`)
+        res.send(result[0]);
+        console.log(result)
+    } catch (error) {
+        console.log('error al listar',error);
+        res.status(404).send('Error al listar producto')
+    }
+})
+
 //crear productos
 router.post('/',async (req,res)=>{
     try {
-        const {nombre,precio,stock,fecha_vencimiento,categorias_id} = req.body
-        const [result] = await pool.query('insert into productos (nombre,precio,stock,fecha_vencimiento,categorias_id) values (?,?,?,?,?)',[nombre,precio,stock,fecha_vencimiento,categorias_id])
+        const {name,description,stock,price,categoria} = req.body
+        const [result] = await pool.query('insert into productos (name, description, price, stock, categoria) values (?,?,?,?,?)',[name,description,price,stock,categoria])
         res.json({
             message: 'producto creado con exito',
         })
@@ -34,8 +46,8 @@ router.post('/',async (req,res)=>{
     router.patch('/:id', async (req, res) => {
         try {
             const {id} = req.params;
-            const {nombre,precio,stock,fecha_vencimiento,categorias_id} = req.body
-            await pool.query('update productos set nombre = ?,precio=?,stock=?,fecha_vencimiento=?,categorias_id=? where id = ?', [nombre,precio,stock,fecha_vencimiento,categorias_id,id])
+            const {name,description,stock,price,categoria} = req.body
+            await pool.query('update productos set name = ?,price=?,stock=?,description=?,categoria=? where id = ?', [name,price,stock,description,categoria,id])
             res.json({
                 message: 'producto actualizado con éxito',
             })
